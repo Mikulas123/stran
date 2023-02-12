@@ -1,0 +1,46 @@
+{% extends "main.html" %}
+
+{% block obsah %}
+
+{% if uspech %}
+
+<h3 style="color:green" align="center"> {{ uspech }} </h3>
+
+{% else %}
+
+<table width=100%>
+    <tr>
+
+        <td width=33%></td>
+        <td width=33% align="center">
+
+
+
+
+
+            <h3>Změnit heslo</h3>
+
+            <form action="{{ url_for("zmenahesla") }}" method="POST" align="center"><br>
+
+            <input type="password" name="stare_heslo" placeholder="Staré heslo"><br><br>
+            <input type="password" name="nove_heslo" placeholder="Nové heslo"><br><br>
+            <input type="password" name="heslo_znovu" placeholder="Nové heslo znovu"><br><br>
+
+
+            <input type="submit" value="Odeslat" ><br><br>
+            </form>
+
+            <br><br>
+            <div style="color:red"> {{ chybova_zprava }} </div>
+
+
+         </td>
+         <td width=33%></td>
+    </tr>
+</table>
+
+{% endif %}
+
+
+
+{% endblock %}

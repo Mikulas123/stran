@@ -1,0 +1,54 @@
+{% extends "main.html" %}
+
+{% block obsah %}
+
+
+<center><h2>Správa uživatelů</h2>
+
+
+<table>
+{% for i in uzivatele %}
+    <tr>
+        <td valign="top">
+            {{ i[0] }}
+        </td>
+
+        <td valign="top">
+            : {{ i[1] }}
+        </td>
+
+        <td valign="top">
+            {% if i[2]=="A" %}
+            : POVOLENO
+            {% else %}
+            : BLOKOVÁNO
+            {% endif %}
+        </td>
+
+        <td>
+            <form action="{{ url_for("adm_uziv") }}" method="POST">
+                  <input type="hidden" name="akce" value="povolit">
+                  <input type="hidden" name="login" value="{{ i[0] }}">
+                  <input type="hidden" name="povolen" value="{{ i[2] }}">
+               :  <input type="submit" value="Povolit/Blokovat">
+
+            </form>
+        </td>
+
+        <td>
+            <form action="{{ url_for("adm_uziv") }}" method="POST">
+                  <input type="hidden" name="akce" value="smazat">
+                  <input type="hidden" name="login" value="{{ i[0] }}">
+               :  <input type="submit" value="Smazat">
+
+            </form>
+        </td>
+    </tr>
+
+
+{% endfor %}
+</table>
+
+</center>
+
+{% endblock %}

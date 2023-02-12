@@ -1,0 +1,122 @@
+<head>
+
+    <title>stranka</title>
+
+    <style>
+
+        #menu {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            margin: 2% 0 2% 0;
+            font-size: 20px;
+        }
+
+        #nadpis {
+            display: flex;
+            justify-content: space-around;
+            text-decoration: underline;
+        }
+        #copyright {
+            float:right;
+        }
+        #logo {
+            position: absolute;
+            width: 10%;
+            left: 3%;
+            top: 1%;
+        }
+
+        #prihlaseni {
+            position: absolute;
+            width: 10%;
+            right: 3%;
+            top: 3%;
+        }
+
+        #zmenahesla {
+            position: absolute;
+            width: 10%;
+            right: 3%;
+            top: 6%;
+        }
+
+        #obsah  {
+            font-size: 17px;
+        }
+
+    </style>
+
+
+
+
+
+</head>
+
+
+
+<body>
+
+    <div id="prihlaseni">Přihlášený uživatel: <br><b>{{ session["uziv"] }}</b>
+    <a href="{{ url_for("prihlaseni") }}">
+
+            {% if session["uziv"] %}
+            <br>Odhlásit se
+
+            {% else %}
+            Přihlásit se
+
+            {% endif %}
+
+        </a></div>
+
+
+    <div id="zmenahesla">
+
+
+    </a></div>
+
+    <img src='{{url_for("static",filename="/static/kokos4.jpg")}}' id="logo">
+
+    <h1 id="nadpis">stranka</h1><br><br>
+
+
+
+    <hr>
+
+    {% block mar %}
+
+    Přihlášený uživatel: {{session['uziv'] }}
+    <br>
+    {% if session['uziv'] %}
+    <a href="{{ url_for('zmenahesla')}}">Změna hesla</a><br>
+        {% if session['uziv']=="admin" %}
+        <a href="{{ url_for('adm_uziv') }}">Administrace uživatelů</a><br>
+        {% endif %}
+    {% endif %}
+    {% endblock %}
+
+    {% block obsah %}
+
+    <div id="obsah">
+     text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text
+     text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text
+     text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text
+     text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text
+     text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text
+     text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text
+     text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text
+
+
+
+    </div>
+
+    {% endblock %}
+
+    <hr>
+
+    <div id="copyright">(c) Copyright 2022</div>
+
+</body>
+
+</html>

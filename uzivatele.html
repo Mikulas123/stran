@@ -1,0 +1,51 @@
+{% extends "main.html" %}
+
+{% block obsah %}
+
+
+<h2 align="center">Administrace uzivatelů </h2>
+
+
+
+<table border=1, align="center">
+
+    <tr>
+
+        <th>Login</th>
+        <th>E-mail</th>
+        <th>Přihlášení</th>
+        <th>&nbsp;</th>
+
+    </tr>
+
+{% for rd in uzivatele %}
+]
+
+
+    <tr><td> {{ rd[0]}}</td> <td>{{ rd[1] }}</td>
+    <td>
+        {% if rd[2]=="A" %}
+        POVOLENO
+        {% else %}
+        ZAKÁZÁNO
+        {% endif %}
+    </td>
+    <td>
+        <form action="{{ url_for("adm_uziv")}}" method="POST">
+            <input type="hidden" name="akce" value="povolit"
+            <input type="hidden" name="login" value="{{ rd[0] }}">
+            <input type="hidden" name="povolen" value="{{ rd[2] }}">
+            <input type="submit" value="Změnit">
+        </form>
+        <form action="{{ url_for("adm_uziv")}}" method="POST">
+            <input type="hidden" name="akce" value="smazat"
+            <input type="hidden" name="login" value="{{ rd[0] }}">
+            <input type="submit" name="Smazat">
+        </form>
+    </td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+{% endblock %}

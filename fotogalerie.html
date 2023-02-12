@@ -1,0 +1,26 @@
+{% extends "main.html" %}
+
+{% block obsah %}
+
+
+<div style="color:red"> {{ zprava }} </div>
+
+{% for soubor in fotky %}
+
+    <img src="/static/upload/{{ soubor }}" width=33% height=35% align="top">
+
+{% endfor %}
+
+{% if session ['uziv']%}
+
+<form action="{{ url_for("upload_foto") }}" method="POST" enctype="multipart/form-data">
+    <input type="file" name="soubor">
+    <input type="submit" vale="nahrát na web">
+</form>
+
+{% endif%}
+
+
+
+{% endblock %}
+
