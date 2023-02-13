@@ -1,0 +1,39 @@
+{% extends "main.html" %}
+
+{% block obsah %}
+
+{% if uspech %}
+
+<h3 style="color:green" align="center"> {{ uspech }} </h3>
+
+{% else %}
+
+<table width=100% align="center">
+    <tr>
+
+        <td width=33%></td>
+        <td width=33% align="center">
+
+
+            <form action="{{url_for("registrace") }}" method="POST">
+
+
+            <h3>Zaregistrujte se</h3>
+            <input type="text" name="jmeno" placeholder="Jméno" value="{{ jmeno }}" maxlenght="20"><br><br>
+            <input type="password" name="heslo" placeholder="Heslo"><br><br>
+            <input type="password" name="potvrdit_heslo" placeholder="Potvrdit heslo"><br><br>
+            <input type="text" name="email" placeholder="Zadejte email" maxlenght="45"><br><br>
+            <input type="submit" value="Odeslat">
+            <br><br>
+            <div style="color:red"> {{ chybova_zprava }} </div>
+
+           </form>
+         </td>
+         <td width=33%></td>
+    </tr>
+</table>
+
+
+{% endif %}
+
+{% endblock %}
