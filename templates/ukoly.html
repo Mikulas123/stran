@@ -1,0 +1,27 @@
+{% extends "main.html" %}
+
+{% block obsah %}
+
+<center>
+<table>
+  <thead>
+    <tr>
+      <th>Název úkolu</th>
+      <th>Termín</th>
+      <th>Popis</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for ukol in ukoly %}
+    <tr>
+      <td>{{ ukol[0] }}</td>
+      <td>{{ ukol[1] }}</td>
+      <td>{{ ukol[2] }}</td>
+
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+</center>
+{% endblock %}

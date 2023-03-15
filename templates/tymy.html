@@ -1,0 +1,41 @@
+{% extends "main.html" %}
+
+
+
+{% block obsah %}
+
+
+<h2 align="center">Administrace týmů </h2>
+
+
+
+<table border=1, align="center">
+
+    <tr>
+
+        <th>Název týmu</th>
+        <th>Kapitán</th>
+        <th>&nbsp;</th>
+
+    </tr>
+
+{% for rd in tymy %}
+
+
+    <tr><td> {{ rd[0]}}</td> <td>{{ rd[1] }}</td>
+
+    <td>
+        <form action="{{ url_for('adm_tymu')}}" method="POST">
+        <input type="hidden" name="akce" value="smazat">
+        <input type="hidden" name="jmeno_tymu" value="{{ rd[0] }}">
+        <input type="submit" value="Smazat">
+        </form>
+    </td>
+
+
+    </tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}

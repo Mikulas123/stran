@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, session
+from flask import Flask, request, render_template, session, url_for, redirect
 import hashlib
 import MySQLdb
 
@@ -24,8 +24,7 @@ def mojeDBconnect():
 
 @app.route('/databaze/')
 def databaze():
-    #db=MySQLdb.connect("kol39313.mysql.pythonanywhere-services.com","kol39313","Jablko31","kol39313$default")
-    db = mojeDBconnect()
+    db=mojeDBconnect()
     cur = db.cursor()
     cur.execute("select * from student")
 
@@ -87,7 +86,7 @@ def registrace():
 
 
                 if cur.rowcount >0:
-                    chybova_zprava="Úspěšně jste se zaregistroval" +jm
+                    uspech="Úspěšně jste se zaregistroval " +jm
 
                 db.close()
 
@@ -156,43 +155,176 @@ def prihlaseni():
 
 
 
-@app.route('/zprava-uzivatelu/', methods=['GET','POST'])
+
+
+
+@app.route('/sprava-uzivatelu/', methods=['GET','POST'])
 def adm_uziv():
 
     uzivatele=""
-
+    tymy=""
 
     db = mojeDBconnect()
     cur=db.cursor()
+    cur2=db.cursor()
+    cur3=db.cursor()
 
-    if request.method=="POST":
+    if request.method == "POST":
+
 
         akce=request.form["akce"]
         login=request.form["login"]
 
-        if akce=="povolit":
-
-            if request.form["povolen"]=="A":
-                povolen="N"
-            else:
-
-                povolen="A"
-
-            cur.execute(f'update uziv set povolen="{povolen}" where login="{login}";')
-            db.commit()
-
-
-        elif akce=="smazat":
+        if akce == "smazat":
 
             cur.execute(f'delete from uziv where login="{login}";')
             db.commit()
 
-    cur.execute("select login, email, povolen from uziv")
+        elif akce == "pridat_tym":
+
+            try:
+
+                tym_id=request.form["tymy"]
+
+                cur3.execute(f'select id_uziv from uziv where login="{login}"')
+                id_uziv = cur3.fetchone()[0]
+
+                cur3.execute(f'select id_tymu from tymy where jmeno_tymu="{tym_id}"')
+                id_tymu = cur3.fetchone()[0]
+
+                cur3.execute(f'insert into uziv_tym (id_uzivatele, id_tymu) values ({id_uziv}, {id_tymu})')
+                db.commit()
+
+            except TypeError:
+                pass
+
+
+
+
+    cur.execute("select login, email from uziv")
 
     uzivatele=cur.fetchall()
 
+    cur2.execute("select jmeno_tymu from tymy")
+
+    tymy=cur2.fetchall()
 
     db.close()
 
-    return render_template("uzivatele.html", uzivatele=uzivatele)
+
+    return render_template("uzivatele.html", uzivatele=uzivatele, tymy=tymy)
+
+
+@app.route('/sprava-tymu', methods=['GET','POST'])
+def adm_tymu():
+
+    tymy=""
+
+    db = mojeDBconnect()
+    cur=db.cursor()
+
+    if request.method == "POST":
+
+
+        akce=request.form["akce"]
+        jmeno_tymu=request.form["jmeno_tymu"]
+
+        if akce == "smazat":
+
+            cur.execute(f'delete from tymy where jmeno_tymu="{jmeno_tymu}";')
+            db.commit()
+
+    cur.execute("select jmeno_tymu, kapitan from tymy")
+
+    tymy=cur.fetchall()
+
+    db.close()
+
+    return render_template("tymy.html", tymy=tymy)
+
+@app.route('/tvoreni-tymu', methods=['GET', 'POST'])
+def tvor_tym():
+
+    chybova_zprava=""
+    uspech=""
+
+    if request.method=='POST':
+
+        nz=request.form["nazev"]
+
+        if nz=="":
+            chybova_zprava="Pole musí být vyplněno"
+        else:
+            if chybova_zprava=="":
+
+                db = mojeDBconnect()
+                cur = db.cursor()
+                cur.execute(f'insert into tymy (jmeno_tymu) values ("{nz}")')
+                db.commit()
+
+                db.close()
+
+    return render_template("prihlastym.html", chybova_zprava=chybova_zprava, uspech=uspech)
+
+@app.route('/tvoreni-ukolu', methods=['GET', 'POST'])
+def tvor_ukol():
+
+
+
+    db = mojeDBconnect()
+    cur = db.cursor()
+
+
+
+    if request.method == 'POST':
+
+        nazev = request.form['nazev']
+        termin = request.form['termin']
+        popis = request.form['popis']
+
+
+        cur.execute(f"INSERT INTO ukoly (nazev, termin, popis) VALUES ('{nazev}', '{termin}', '{popis}')")
+        db.commit()
+
+        db.close()
+
+
+    return render_template("vytvorukol.html")
+
+@app.route('/prehled-ukolu', methods=['GET', 'POST'])
+def prehled_ukolu():
+
+    ukoly=""
+
+    db = mojeDBconnect()
+    cur = db.cursor()
+
+
+    cur.execute("select nazev, termin, popis from ukoly")
+
+    ukoly=cur.fetchall()
+
+    db.close()
+
+
+    return render_template("ukoly.html", ukoly=ukoly)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

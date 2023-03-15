@@ -1,0 +1,36 @@
+{% extends "main.html" %}
+
+{% block obsah %}
+
+<center>
+
+<h2>Vytvořit nový úkol</h2>
+
+<form method="POST" action="{{ url_for('tvor_ukol') }}">
+    <div>
+        <label for="nazev">Název úkolu:</label>
+        <input type="text" id="nazev" name="nazev" required>
+    </div>
+    <div>
+        <label for="termin">Termín splnění:</label>
+        <input type="datetime-local" id="termin" name="termin" required>
+    </div>
+    <div>
+        <label for="popis">Popis úkolu:</label>
+        <textarea id="popis" name="popis" rows="4" required></textarea>
+    </div>
+    <div>
+        <label for="tym">Tým:</label>
+        <select id="tym" name="tym">
+            <option value="">-- Vyberte tým --</option>
+            <option value="">suuuuuuuuuuuuuuuus</option>
+        </select>
+    </div>
+    <div>
+        <input type="submit" value="Vytvořit úkol">
+    </div>
+</form>
+
+</center>
+
+{% endblock %}

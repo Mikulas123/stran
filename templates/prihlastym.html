@@ -1,0 +1,22 @@
+{% extends "main.html" %}
+
+{% block obsah %}
+
+
+<h2 align="center"> Vytvoření týmu</h2>
+
+
+            <center>
+
+            <form action="" method="POST">
+
+
+            <h3>Vytvořit tým</h3>
+            <input type="text" name="nazev" placeholder="Název týmu" ><br><br>
+            <input type="submit" value="Odeslat">
+            <br><br>
+            <div style="color:red"> {{ chybova_zprava }} </div>
+            <div style="color:green"> {{ uspech }} </div>
+            </center>
+
+{% endblock %}

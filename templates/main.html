@@ -76,7 +76,6 @@
 
     </a></div>
 
-    <img src='{{url_for("static",filename="/static/kokos4.jpg")}}' id="logo">
 
     <h1 id="nadpis">stranka</h1><br><br>
 
@@ -92,6 +91,11 @@
     <a href="{{ url_for('zmenahesla')}}">Změna hesla</a><br>
         {% if session['uziv']=="admin" %}
         <a href="{{ url_for('adm_uziv') }}">Administrace uživatelů</a><br>
+        <a href="{{ url_for('tvor_tym') }}">Vytvořit tým</a><br>
+        <a href="{{ url_for('adm_tymu') }}">Administrace týmů</a><br>
+        <a href="{{ url_for('tvor_ukol') }}">Vytvořit úkol</a><br>
+        <a href="{{ url_for('prehled_ukolu') }}">Přehled úkolů</a><br>
+
         {% endif %}
     {% endif %}
     {% endblock %}
@@ -99,13 +103,7 @@
     {% block obsah %}
 
     <div id="obsah">
-     text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text
-     text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text
-     text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text
-     text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text
-     text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text
-     text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text
-     text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text
+
 
 
 
