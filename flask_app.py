@@ -1,15 +1,19 @@
-from flask import Flask, request, render_template, session, url_for, redirect
+from flask import Flask, request, render_template, session, url_for, redirect, flash
 import hashlib
 import MySQLdb
+import traceback
+
 
 
 def md5(vstup):
     return hashlib.md5(vstup.encode("utf-8")).hexdigest()
 
+
 app = Flask(__name__)
 app.secret_key = "123"
 
 @app.route('/')
+@app.route('/home')
 def main():
     return render_template("main.html")
 
@@ -156,18 +160,20 @@ def prihlaseni():
 
 
 
-
-
 @app.route('/sprava-uzivatelu/', methods=['GET','POST'])
 def adm_uziv():
 
     uzivatele=""
+    chyba=""
     tymy=""
+    spolec=""
 
     db = mojeDBconnect()
     cur=db.cursor()
     cur2=db.cursor()
     cur3=db.cursor()
+    cur4=db.cursor()
+
 
     if request.method == "POST":
 
@@ -184,15 +190,13 @@ def adm_uziv():
 
             try:
 
+
                 tym_id=request.form["tymy"]
 
                 cur3.execute(f'select id_uziv from uziv where login="{login}"')
                 id_uziv = cur3.fetchone()[0]
 
-                cur3.execute(f'select id_tymu from tymy where jmeno_tymu="{tym_id}"')
-                id_tymu = cur3.fetchone()[0]
-
-                cur3.execute(f'insert into uziv_tym (id_uzivatele, id_tymu) values ({id_uziv}, {id_tymu})')
+                cur3.execute(f'insert into uziv_tym (id_uzivatele, id_tymu) values ({id_uziv}, {tym_id})')
                 db.commit()
 
             except TypeError:
@@ -200,19 +204,31 @@ def adm_uziv():
 
 
 
+        elif akce == "smazat_z_tymu":
+
+            cur.execute(f'delete from uziv_tym where id_uzivatele=(select id_uziv from uziv where login="{login}")')
+            db.commit()
+
+
 
     cur.execute("select login, email from uziv")
 
     uzivatele=cur.fetchall()
 
-    cur2.execute("select jmeno_tymu from tymy")
+    cur2.execute("select jmeno_tymu, id_tymu from tymy")
 
     tymy=cur2.fetchall()
 
+    cur4.execute("SELECT  uziv.login, tymy.jmeno_tymu FROM uziv_tym JOIN uziv ON uziv_tym.id_uzivatele = uziv.id_uziv  JOIN tymy ON uziv_tym.id_tymu = tymy.id_tymu")
+
+    spolec=cur4.fetchall()
+
     db.close()
 
+    return render_template("uzivatele.html", uzivatele=uzivatele, tymy=tymy,chyba=chyba, spolec=spolec)
 
-    return render_template("uzivatele.html", uzivatele=uzivatele, tymy=tymy)
+
+
 
 
 @app.route('/sprava-tymu', methods=['GET','POST'])
@@ -220,19 +236,49 @@ def adm_tymu():
 
     tymy=""
 
+
     db = mojeDBconnect()
     cur=db.cursor()
+
+
 
     if request.method == "POST":
 
 
         akce=request.form["akce"]
         jmeno_tymu=request.form["jmeno_tymu"]
+        login=request.form["login"]
 
         if akce == "smazat":
 
             cur.execute(f'delete from tymy where jmeno_tymu="{jmeno_tymu}";')
             db.commit()
+
+
+        elif akce == "pridat_roli":
+
+
+            role = request.form["role"]
+
+            if role == "1":
+
+
+                jmeno_tymu=request.form["jmeno_tymu"]
+
+                try:
+
+                    cur.execute(f'select id_tymu from uziv_tym where id_uzivatele=(select id_uziv from uziv where login="{login}")')
+                    id_tymu = cur.fetchone()[0]
+
+                    cur.execute(f'update tymy set kapitan="{login}" where id_tymu={id_tymu}')
+                    db.commit()
+
+                except TypeError:
+                    pass
+
+
+
+
 
     cur.execute("select jmeno_tymu, kapitan from tymy")
 
@@ -269,7 +315,7 @@ def tvor_tym():
 @app.route('/tvoreni-ukolu', methods=['GET', 'POST'])
 def tvor_ukol():
 
-
+    tymy=""
 
     db = mojeDBconnect()
     cur = db.cursor()
@@ -286,13 +332,53 @@ def tvor_ukol():
         cur.execute(f"INSERT INTO ukoly (nazev, termin, popis) VALUES ('{nazev}', '{termin}', '{popis}')")
         db.commit()
 
-        db.close()
+    cur.execute("select jmeno_tymu from tymy")
+
+    tymy=cur.fetchall()
+
+    db.close()
 
 
-    return render_template("vytvorukol.html")
+    return render_template("vytvorukol.html",tymy=tymy)
 
 @app.route('/prehled-ukolu', methods=['GET', 'POST'])
 def prehled_ukolu():
+
+    ukoly=""
+
+    db = mojeDBconnect()
+    cur = db.cursor()
+
+    if request.method == "POST":
+
+
+        akce = request.form["akce"]
+
+
+        if akce == "smazat":
+
+            try:
+
+                login = request.form["login"]
+
+                cur.execute("DELETE FROM ukoly WHERE nazev=%s", (login,))
+                db.commit()
+
+            except TypeError:
+                pass
+
+
+    cur.execute("select nazev, termin, popis from ukoly")
+
+    ukoly=cur.fetchall()
+
+    db.close()
+
+
+    return render_template("ukoly.html", ukoly=ukoly)
+
+@app.route('/uziv-ukoly', methods=['GET', 'POST'])
+def uziv_ukoly():
 
     ukoly=""
 
@@ -307,7 +393,61 @@ def prehled_ukolu():
     db.close()
 
 
-    return render_template("ukoly.html", ukoly=ukoly)
+
+    return render_template("uzivukoly.html", ukoly=ukoly)
+
+
+
+
+@app.route('/zarazeni', methods=['GET', 'POST'])
+def zarazeni():
+
+    zarazeni=""
+    chyba=""
+
+    db = mojeDBconnect()
+    cur = db.cursor()
+
+
+    if request.method == "POST":
+
+        akce = request.form['akce']
+        login = request.form['login']
+
+        if akce == "smazat":
+
+
+            cur.execute('delete uziv.login, tymy.jmeno_tymu FROM uziv_tym JOIN uziv ON uziv_tym.id_uzivatele = uziv.id_uziv JOIN tymy ON uziv_tym.id_tymu = tymy.id_tymu')
+            #cur.execute(f"DELETE FROM uziv_tym WHERE id_uzivatele = '{login}'")
+            db.commit()
+
+
+
+    cur.execute('SELECT uziv.login, tymy.jmeno_tymu FROM uziv_tym JOIN uziv ON uziv_tym.id_uzivatele = uziv.id_uziv JOIN tymy ON uziv_tym.id_tymu = tymy.id_tymu')
+    #cur.execute('select id_uzivatele, id_tymu from uziv_tym ')
+
+    zarazeni=cur.fetchall()
+
+    db.close()
+
+
+    return render_template("zarazeni.html", zarazeni=zarazeni, chyba=chyba)
+
+@app.route('/profil', methods=['GET', 'POST'])
+def profil():
+
+
+    return render_template("profil.html")
+
+
+
+
+
+
+
+
+
+
 
 
 

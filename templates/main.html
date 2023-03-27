@@ -1,120 +1,194 @@
-<head>
-
-    <title>stranka</title>
-
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vytvořit tým</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <style>
 
-        #menu {
+        img {
+            display: block;
             width: 100%;
-            display: flex;
-            justify-content: space-around;
-            margin: 2% 0 2% 0;
-            font-size: 20px;
+            height: auto;
         }
 
-        #nadpis {
-            display: flex;
-            justify-content: space-around;
-            text-decoration: underline;
-        }
-        #copyright {
-            float:right;
-        }
-        #logo {
-            position: absolute;
-            width: 10%;
-            left: 3%;
-            top: 1%;
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
         }
 
-        #prihlaseni {
-            position: absolute;
-            width: 10%;
-            right: 3%;
-            top: 3%;
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
         }
 
-        #zmenahesla {
-            position: absolute;
-            width: 10%;
-            right: 3%;
-            top: 6%;
+        p {
+            font-size: 18px;
+            line-height: 1.5;
+            margin-bottom: 20px;
         }
 
-        #obsah  {
-            font-size: 17px;
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
         }
 
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            top: 0;
+            width: 100%;
+        }
+
+    * {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.column {
+  float: left;
+  width: 25%;
+  padding: 0 10px;
+}
+
+
+.row {margin: 0 -5px;}
+
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  padding-top: 25px;
+  text-align: center;
+  background-color: #f1f1f1;
+}
+
+
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+    display: block;
+    margin-bottom: 20px;
+  }
+}
     </style>
-
-
-
-
-
 </head>
-
-
-
 <body>
-
-    <div id="prihlaseni">Přihlášený uživatel: <br><b>{{ session["uziv"] }}</b>
-    <a href="{{ url_for("prihlaseni") }}">
-
+   <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Nabídka</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{{ url_for("main") }}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for("prihlaseni") }}">
             {% if session["uziv"] %}
-            <br>Odhlásit se
+            Odhlásit se
 
             {% else %}
             Přihlásit se
 
             {% endif %}
 
-        </a></div>
+            </a>
+        </li>
 
+        {% if session['uziv'] %}
+        <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{{ url_for('zmenahesla')}}">Změna hesla</a>
+        </li>
 
-    <div id="zmenahesla">
+        <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{{ url_for('profil')}}">Profil</a>
+        </li>
 
-
-    </a></div>
-
-
-    <h1 id="nadpis">stranka</h1><br><br>
-
-
-
-    <hr>
-
-    {% block mar %}
-
-    Přihlášený uživatel: {{session['uziv'] }}
-    <br>
-    {% if session['uziv'] %}
-    <a href="{{ url_for('zmenahesla')}}">Změna hesla</a><br>
+        <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{{ url_for('uziv_ukoly')}}">ukoly</a>
+        </li>
         {% if session['uziv']=="admin" %}
-        <a href="{{ url_for('adm_uziv') }}">Administrace uživatelů</a><br>
-        <a href="{{ url_for('tvor_tym') }}">Vytvořit tým</a><br>
-        <a href="{{ url_for('adm_tymu') }}">Administrace týmů</a><br>
-        <a href="{{ url_for('tvor_ukol') }}">Vytvořit úkol</a><br>
-        <a href="{{ url_for('prehled_ukolu') }}">Přehled úkolů</a><br>
 
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Nabídka administrátora
+          </a>
+
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{{ url_for('registrace') }}">Vytovřit uživatele</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('adm_uziv') }}">Administrace uživatelů</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('tvor_tym') }}">Vytvořit tým</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('adm_tymu') }}">Administrace týmů</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('tvor_ukol') }}">Vytvořit úkol</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('prehled_ukolu') }}">Přehled úkolů</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('zarazeni') }}">Zařazení</a></li>
+          </ul>
+        </li>
         {% endif %}
+
     {% endif %}
-    {% endblock %}
 
-    {% block obsah %}
-
-    <div id="obsah">
-
-
-
-
+      </ul>
     </div>
+  </div>
+</nav>
 
-    {% endblock %}
 
-    <hr>
+{% block obsah %}
+    <!-- Obrázek -->
+    <img class="mySlides" src="/static/tym3.jpg" alt="Obrázek">
+    <img class="mySlides" src="/static/tym5.png" alt="Obrázek">
+    <img class="mySlides" src="/static/tym4.jpg" alt="Obrázek">
 
-    <div id="copyright">(c) Copyright 2022</div>
+    <!-- Obsah -->
+    <main>
+        <h1>Vítejte na stránce, kde je možné vše bum ratata</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vel mauris justo. Donec eget fermentum nunc. Morbi sagittis mi quis consectetur ullamcorper. Etiam molestie odio non velit dapibus auctor. Integer blandit eros et nisl congue auctor. Ut sit amet leo sit amet nisl placerat sodales. Fusce vel ex euismod, ultricies sapien vitae, pulvinar massa.</p>
+        <p>Vestibulum vel augue vel mi vestibulum interdum ac ut diam. Ut eleifend nisi sit amet tellus malesuada, eget aliquet est fermentum. Fusce ut mi vel nisi feugiat bibendum eget sed purus. Praesent eget quam tristique, ultricies metus a, aliquet nisi. Nunc auctor dolor sit amet tortor maximus, ut bibendum sapien commodo. Pellentesque a sem ut ante pellentesque vulputate ac eget justo. Proin non elit consequat, suscipit augue vel, laoreet mauris. Vivamus fringilla libero sit amet enim dictum, nec finibus dolor malesuada.</p>
+    </main>
 
+{% endblock %}
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous"></script>
+<script>var myIndex = 0;
+carousel();
+
+function carousel() {
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  myIndex++;
+  if (myIndex > x.length) {myIndex = 1}
+  x[myIndex-1].style.display = "block";
+  setTimeout(carousel, 3000);
+}</script>
 </body>
-
 </html>

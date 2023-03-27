@@ -3,19 +3,20 @@
 {% block obsah %}
 
 
-<h2 align="center">Administrace uzivatelů </h2>
+
+<h2 align="center">Administrace uživatelů</h2>
 
 
 
-<table border=1, align="center">
+<table border=1, align="center" class="table table-hover">
 
     <tr>
 
         <th>Login</th>
         <th>E-mail</th>
         <th>&nbsp;</th>
-        <th>Postavení</th>
         <th>Zařazení</th>
+
 
     </tr>
 
@@ -29,46 +30,31 @@
         <form action="{{ url_for("adm_uziv")}}" method="POST">
             <input type="hidden" name="akce" value="smazat">
             <input type="hidden" name="login" value="{{ rd[0] }}">
-            <input type="submit" value="Smazat">
+            <input class="btn btn-outline-dark" type="submit" value="Smazat">
         </form>
+
     </td>
-   <td>
-            <form action="{{ url_for("adm_uziv")}}" method="POST">
-                <select name="role">
-                    <option value="0">Člen týmu</option>
-                    <option value="1">Kapitán</option>
-                </select>
-                <input type="hidden" name="akce" value="priradit">
-                <input type="hidden" name="login" value="{{ rd[0] }}">
-                <input type="hidden" name="tymy" value="">
-                <input type="submit" value="Přiřadit">
-            </form>
-        </td>
+
 <td>
 <form action="{{ url_for("adm_uziv")}}" method="POST">
-  <select name="tymy" id="tym">
+  <select name="tymy" id="tym", value="tymy">
       <option value="">Nezařazen</option>
     {% for tym in tymy %}
-        <option value=" {{ tym [1] }}">{{ tym [0] }}</option>
+        <option value="{{ tym [1] }}">{{ tym [0] }}</option>
     {% endfor %}
   </select>
+
 <input type="hidden" name="akce" value="pridat_tym">
 <input type="hidden" name="login" value="{{ rd[0] }}">
-<input type="submit" value="Přidat tým">
+<input type="submit" class="btn btn-outline-dark" value="Přidat tým">
 </form>
+
 </td>
 
 
-    </tr>
+</tr>
 {% endfor %}
 
 </table>
 
 {% endblock %}
-
-
-
-
-
-
-

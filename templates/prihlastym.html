@@ -3,20 +3,24 @@
 {% block obsah %}
 
 
-<h2 align="center"> Vytvoření týmu</h2>
 
 
             <center>
+                <table>
 
             <form action="" method="POST">
 
 
+
             <h3>Vytvořit tým</h3>
-            <input type="text" name="nazev" placeholder="Název týmu" ><br><br>
-            <input type="submit" value="Odeslat">
+            <td>
+            <input class="form-control" type="text" name="nazev" placeholder="Název týmu"  aria-label="default input example" ><br><br>
+            <input class="btn btn-primary btn-lg" type="submit" value="Odeslat">
+            </td>
             <br><br>
             <div style="color:red"> {{ chybova_zprava }} </div>
             <div style="color:green"> {{ uspech }} </div>
+            </table>
             </center>
 
 {% endblock %}

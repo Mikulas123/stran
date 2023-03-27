@@ -3,12 +3,13 @@
 {% block obsah %}
 
 <center>
-<table>
+<table class="table table-hover">
   <thead>
     <tr>
       <th>Název úkolu</th>
       <th>Termín</th>
       <th>Popis</th>
+      <th>smazat</th>
     </tr>
   </thead>
   <tbody>
@@ -18,6 +19,16 @@
       <td>{{ ukol[1] }}</td>
       <td>{{ ukol[2] }}</td>
 
+      <td><form action="{{ url_for("adm_tymu")}}" method="POST">
+            <input type="hidden" name="akce" value="smazat">
+            <input type="hidden" name="login" value="{{ ukol[0] }}">
+            <input type="submit" class="btn btn-outline-dark" value="Smazat">
+        </form>
+        </td>
+
+
+
+
     </tr>
     {% endfor %}
   </tbody>
@@ -25,3 +36,5 @@
 
 </center>
 {% endblock %}
+
+

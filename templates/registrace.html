@@ -19,11 +19,19 @@
 
 
             <h3>Zaregistrujte se</h3>
-            <input type="text" name="jmeno" placeholder="Jméno" value="{{ jmeno }}" maxlenght="20"><br><br>
-            <input type="password" name="heslo" placeholder="Heslo"><br><br>
-            <input type="password" name="potvrdit_heslo" placeholder="Potvrdit heslo"><br><br>
-            <input type="text" name="email" placeholder="Zadejte email" maxlenght="45"><br><br>
-            <input type="submit" value="Odeslat">
+
+
+
+
+                <input class="form-control" type="text" name="jmeno" placeholder="Jméno" value="{{ jmeno }}" maxlenght="20" aria-label="default input example"><br><br>
+
+                <input type="password" class="form-control" name="heslo" placeholder="Heslo" ><br><br>
+
+                <input type="password" name="potvrdit_heslo" class="form-control" placeholder="Potvrdit heslo"><br><br>
+
+                <input  class="form-control" type="text"  name="email" placeholder="Zadejte email" maxlenght="45" aria-label="default input example"><br><br>
+
+                <input class="btn btn-primary btn-lg" type="submit" value="Odeslat">
             <br><br>
             <div style="color:red"> {{ chybova_zprava }} </div>
             <div style="color:green"> {{ uspech }} </div>

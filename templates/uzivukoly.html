@@ -1,0 +1,36 @@
+{% extends "main.html" %}
+
+
+
+{% block obsah %}
+
+
+{% for ukol in ukoly%}
+
+
+  <div class="column">
+    <div class="card">
+    <h3>{{ ukol[0]}}</h3>
+    <p>{{ ukol[1]}}</p>
+    <p>{{ ukol[2]}}</p>
+    {% if session['uziv']=="admin" %}
+    <p><input type="submit" value="Smazat"></p>
+     <div>
+        <select class="form-select" aria-label="Default select example" id="tym" name="tym" value="tym">
+            <option value="" selected>-- Vyberte člena --</option>
+            {% for tym in tymy%}
+            <option value="{{ tym [1] }}">{{ tym [0] }}</option>
+            {% endfor %}
+
+        </select>
+    </div>
+    {% endif %}
+    </div>
+  </div>
+
+
+{% endfor %}
+
+
+
+{% endblock %}

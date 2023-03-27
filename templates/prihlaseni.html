@@ -19,9 +19,11 @@
 
 
             <h3>Přihlaste se</h3>
-            <input type="text" name="jmeno" placeholder="Jméno" value="{{ jmeno }}"><br><br>
-            <input type="password" name="heslo" placeholder="Heslo"><br><br>
-            <input type="submit" value="Odeslat"> <a href="{{ url_for("registrace") }}"><br><br>Ještě nejste zaregistrováni?
+            <input type="text" class="form-control" name="jmeno" placeholder="Jméno" value="{{ jmeno }}" maxlenght="20" aria-label="default input example"><br><br>
+
+            <input type="password" class="form-control" name="heslo" placeholder="Heslo"><br><br>
+
+            <input class="btn btn-primary btn-lg" type="submit" value="Odeslat"> <a  href="{{ url_for("registrace") }}"><br><br>Ještě nejste zaregistrováni?</a>
             <br><br>
             <div style="color:red"> {{ chybova_zprava }} </div>
 

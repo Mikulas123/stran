@@ -1,0 +1,33 @@
+{% extends "main.html"%}
+
+{% block obsah %}
+{{ chyba }}
+
+<table border=1, align="center" class="table table-hover">
+
+    <tr>
+
+        <th>Uživatel</th>
+        <th>Tym</th>
+        <th>&nbsp;</th>
+
+    </tr>
+
+{% for zar in zarazeni%}
+
+<tr><td> {{ zar[0]}}</td> <td>{{ zar[1] }}</td>
+
+    <td>
+
+        <form action="{{ url_for("zarazeni")}}" method="POST">
+            <input type="hidden" name="akce" value="smazat">
+            <input type="hidden" name="login" value="{{ zar[0] }}">
+            <input type="submit" class="btn btn-outline-dark" value="Smazat">
+        </form>
+
+    </td>
+
+{% endfor %}
+
+{% endblock %}
+

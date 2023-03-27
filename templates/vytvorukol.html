@@ -2,35 +2,54 @@
 
 {% block obsah %}
 
-<center>
+
+
+
+<table width=100%>
+    <tr>
+
+        <td width=33%></td>
+        <td width=33% align="center">
 
 <h2>Vytvořit nový úkol</h2>
 
 <form method="POST" action="{{ url_for('tvor_ukol') }}">
     <div>
         <label for="nazev">Název úkolu:</label>
-        <input type="text" id="nazev" name="nazev" required>
+        <input class="form-control" type="text" id="nazev" name="nazev" required>
     </div>
     <div>
         <label for="termin">Termín splnění:</label>
-        <input type="datetime-local" id="termin" name="termin" required>
+        <input class="form-control" type="datetime-local" id="termin" name="termin" required>
     </div>
-    <div>
+
+
+  <br>
+    <div class="form-floating">
+        <textarea id="popis" class="form-control" placeholder="Leave a comment here" name="popis" rows="4" required></textarea>
         <label for="popis">Popis úkolu:</label>
-        <textarea id="popis" name="popis" rows="4" required></textarea>
     </div>
     <div>
         <label for="tym">Tým:</label>
-        <select id="tym" name="tym">
-            <option value="">-- Vyberte tým --</option>
-            <option value="">suuuuuuuuuuuuuuuus</option>
+        <select class="form-select" aria-label="Default select example" id="tym" name="tym" value="tym">
+            <option value="" selected>-- Vyberte tým --</option>
+            {% for tym in tymy%}
+            <option value="{{ tym [1] }}">{{ tym [0] }}</option>
+            {% endfor %}
         </select>
     </div>
     <div>
-        <input type="submit" value="Vytvořit úkol">
+        <input class="btn btn-primary btn-lg" type="submit" value="Vytvořit úkol">
     </div>
 </form>
 
-</center>
+</td>
+         <td width=33%></td>
+    </tr>
+</table>
+
+
+
+
 
 {% endblock %}

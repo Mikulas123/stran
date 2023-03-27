@@ -9,28 +9,49 @@
 
 
 
-<table border=1, align="center">
+<table border=1, align="center" class="table table-hover">
 
     <tr>
 
         <th>Název týmu</th>
-        <th>Kapitán</th>
+        <th>Postavení</th>
         <th>&nbsp;</th>
+
 
     </tr>
 
 {% for rd in tymy %}
 
 
-    <tr><td> {{ rd[0]}}</td> <td>{{ rd[1] }}</td>
+    <tr><td> {{ rd[0]}}</td>
+
+    <td>
+            <form  method="POST">
+                <select name="role">
+                    <option value="0" selected>Člen týmu</option>
+                    <option value="1">Kapitán</option>
+                </select>
+
+                <input type="hidden" name="akce" value="pridat_roli">
+                <input type="hidden" name="jmeno_tymu" value="{{ rd[0] }}">
+                <input type="hidden" name="tymy" value="">
+                <input class="btn btn-outline-dark" type="submit" value="Přiřadit">
+            </form>
+        </td>
+
+
+
+
 
     <td>
         <form action="{{ url_for('adm_tymu')}}" method="POST">
         <input type="hidden" name="akce" value="smazat">
         <input type="hidden" name="jmeno_tymu" value="{{ rd[0] }}">
-        <input type="submit" value="Smazat">
+        <input class="btn btn-outline-dark" type="submit" value="Smazat">
         </form>
     </td>
+
+
 
 
     </tr>
