@@ -129,26 +129,26 @@ def prihlaseni():
     chybova_zprava=""
     uspech=""
     jmeno=""
-    nalezeno=0
+
 
     if "uziv" in session:
         uspech="Uživatel "+session["uziv"]+" byl odhlášen."
         del session["uziv"]
 
     if request.method=="POST":
-        jm=request.form["jmeno"]
-        hs=md5(jm+";"+request.form["heslo"])
 
+        jm=request.form["jmeno"]
+        hes=md5(jm+";"+request.form["heslo"])
 
         db = mojeDBconnect()
-        cur = db.cursor()
-        heslo=md5(jm+";"+hs)
-        cur.execute(f'insert into uziv (login,heslo) values ("{jm}","{heslo}")')
-        if cur.rowcount >0:
-                nalezeno = 1
+        cur=db.cursor()
+        cur.execute(f'select * from uziv where login="{jm}" and heslo="{hes}"')
+        if cur.rowcount > 0:
+            uspech="OK"
         db.close()
 
-        if nalezeno>0:
+
+        if len(uspech)>0:
           uspech="Úspěšné přihlášení :-) Uživatel: "+jm
           session["uziv"]=jm
         else:
